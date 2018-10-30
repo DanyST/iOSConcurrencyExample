@@ -24,11 +24,12 @@ class ViewController: UIViewController {
     @IBOutlet weak var image04: UIImageView!
     @IBOutlet weak var image05: UIImageView!
     @IBOutlet weak var image06: UIImageView!
+    @IBOutlet weak var syncFilterButton: UIButton!
     
     // Mark - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        syncFilterButton.isEnabled = false
     }
     
     // MARK: - Actions
@@ -39,6 +40,8 @@ class ViewController: UIViewController {
         image04.image = UIImage(named: "Placeholder")
         image05.image = UIImage(named: "Placeholder")
         image06.image = UIImage(named: "Placeholder")
+        
+        syncFilterButton.isEnabled = false
     }
     
     @IBAction func privateQueueDownload(_ sender: UIButton) {
@@ -99,17 +102,24 @@ class ViewController: UIViewController {
         // Salvo necesitemos identificar la cola con un label por alguna razón en particular, deberiamos utilizar las global Queue
         let myConcurrentQueue = DispatchQueue.global(qos: .userInitiated)
         
+        // Dispatch group
+        let group = DispatchGroup()
         
         // asignamos tareas asincronas a la cola
         
+        // Lo añadimos al grupo.
+        // Siempre debemos asegurarnos de que salga del grupo. Si no, nunca termina de esperar el DispatchGroup.
+        group.enter()
         myConcurrentQueue.async {
             let data1 = try! Data(contentsOf: URL(string: self.imageURL01)!)
             
             DispatchQueue.main.async { [weak self] in
                 self?.image01.image = UIImage(data: data1)
+                group.leave()
             }
         }
         
+        group.enter()
         myConcurrentQueue.async {
             let data2 = try! Data(contentsOf: URL(string: self.imageURL02)!)
             
@@ -117,41 +127,58 @@ class ViewController: UIViewController {
                 guard let `self` = self else { return }
                 
                 self.image02.image = UIImage(data: data2)
+                group.leave()
             }
         }
         
+        group.enter()
         myConcurrentQueue.async {
             let data3 = try! Data(contentsOf: URL(string: self.imageURL03)!)
             DispatchQueue.main.async {
                 self.image03.image = UIImage(data: data3)
+                group.leave()
             }
         }
         
+        group.enter()
         myConcurrentQueue.async {
             let data4 = try! Data(contentsOf: URL(string: self.imageURL04)!)
             DispatchQueue.main.async {
                 self.image04.image = UIImage(data: data4)
+                group.leave()
             }
             
         }
+        
+        group.enter()
         myConcurrentQueue.async {
             let data5 = try! Data(contentsOf: URL(string: self.imageURL05)!)
             DispatchQueue.main.async {
                 self.image05.image = UIImage(data: data5)
+                group.leave()
             }
         }
         
+        group.enter()
         myConcurrentQueue.async {
             let data6 = try! Data(contentsOf: URL(string: self.imageURL06)!)
             DispatchQueue.main.async {
                 self.image06.image = UIImage(data: data6)
+                group.leave()
             }
+        }
+        
+        group.notify(queue: DispatchQueue.main) { [weak self] in
+            self?.syncFilterButton.isEnabled = true
         }
     }
     
     @IBAction func asyncDataDownload(_ sender: UIButton) {
     }
     
+    @IBAction func syncFilter(_ sender: UIButton) {
+        print("Deberia aplicar el filtro")
+    }
     
 }
 
