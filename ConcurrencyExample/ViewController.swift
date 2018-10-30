@@ -33,10 +33,66 @@ class ViewController: UIViewController {
     
     // MARK: - Actions
     @IBAction func resetImages(_ sender: UIButton) {
+        image01.image = UIImage(named: "Placeholder")
+        image02.image = UIImage(named: "Placeholder")
+        image03.image = UIImage(named: "Placeholder")
+        image04.image = UIImage(named: "Placeholder")
+        image05.image = UIImage(named: "Placeholder")
+        image06.image = UIImage(named: "Placeholder")
     }
     
     @IBAction func privateQueueDownload(_ sender: UIButton) {
+        // Creamos la cola Serial de trabajo
+        let mySerialQueue = DispatchQueue(label: "io.keepcoding.serial")
+        
+        // asignamos tareas asincronas a la cola
+        mySerialQueue.async {
+            let data1 = try! Data(contentsOf: URL(string: self.imageURL01)!)
+            
+            DispatchQueue.main.async { [weak self] in
+                self?.image01.image = UIImage(data: data1)
+            }
+        }
+        
+        mySerialQueue.async {
+            let data2 = try! Data(contentsOf: URL(string: self.imageURL02)!)
+            
+            DispatchQueue.main.async { [weak self] in
+                guard let `self` = self else { return }
+                
+                self.image02.image = UIImage(data: data2)
+            }
+        }
+        
+        mySerialQueue.async {
+            let data3 = try! Data(contentsOf: URL(string: self.imageURL03)!)
+            DispatchQueue.main.async {
+                self.image03.image = UIImage(data: data3)
+            }
+        }
+        
+        mySerialQueue.async {
+            let data4 = try! Data(contentsOf: URL(string: self.imageURL04)!)
+            DispatchQueue.main.async {
+                self.image04.image = UIImage(data: data4)
+            }
+            
+        }
+        mySerialQueue.async {
+            let data5 = try! Data(contentsOf: URL(string: self.imageURL05)!)
+            DispatchQueue.main.async {
+                self.image05.image = UIImage(data: data5)
+            }
+        }
+        
+        mySerialQueue.async {
+            let data6 = try! Data(contentsOf: URL(string: self.imageURL06)!)
+            DispatchQueue.main.async {
+                self.image06.image = UIImage(data: data6)
+            }
+        }
     }
+    
     @IBAction func privateQueueConcurrentDownload(_ sender: UIButton) {
     }
     
