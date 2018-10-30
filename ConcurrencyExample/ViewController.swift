@@ -177,7 +177,85 @@ class ViewController: UIViewController {
     }
     
     @IBAction func syncFilter(_ sender: UIButton) {
-        print("Deberia aplicar el filtro")
+        
+        // Creamos las operaciones
+        let sepiaOp1 = SepiaFilterOperation()
+        sepiaOp1.inputImage = self.image01.image
+        
+        let sepiaOp2 = SepiaFilterOperation()
+        sepiaOp2.inputImage = self.image02.image
+        
+        let sepiaOp3 = SepiaFilterOperation()
+        sepiaOp3.inputImage = self.image03.image
+        
+        let sepiaOp4 = SepiaFilterOperation()
+        sepiaOp4.inputImage = self.image04.image
+        
+        let sepiaOp5 = SepiaFilterOperation()
+        sepiaOp5.inputImage = self.image05.image
+        
+        let sepiaOp6 = SepiaFilterOperation()
+        sepiaOp6.inputImage = self.image06.image
+        
+        // Creamos la OperationQueue
+        let serialFilterQueue = OperationQueue()
+        serialFilterQueue.maxConcurrentOperationCount = 6
+        
+       
+        
+        // Añadimos completionBlock de las operaciones
+        sepiaOp1.completionBlock = { [weak self] in
+            guard let output = sepiaOp1.outputImage else { return }
+            
+            DispatchQueue.main.async {
+                self?.image01.image = output
+            }
+        }
+        
+        sepiaOp2.completionBlock = { [weak self] in
+            guard let output = sepiaOp2.outputImage else { return }
+            
+            DispatchQueue.main.async {
+                self?.image02.image = output
+            }
+        }
+        
+        sepiaOp3.completionBlock = { [weak self] in
+            guard let output = sepiaOp3.outputImage else { return }
+            
+            DispatchQueue.main.async {
+                self?.image03.image = output
+            }
+        }
+        
+        sepiaOp4.completionBlock = { [weak self] in
+            guard let output = sepiaOp4.outputImage else { return }
+            
+            DispatchQueue.main.async {
+                self?.image04.image = output
+            }
+        }
+        
+        sepiaOp5.completionBlock = { [weak self] in
+            guard let output = sepiaOp5.outputImage else { return }
+            
+            DispatchQueue.main.async {
+                self?.image05.image = output
+            }
+        }
+        
+        sepiaOp6.completionBlock = { [weak self] in
+            guard let output = sepiaOp6.outputImage else { return }
+            
+            DispatchQueue.main.async {
+                self?.image06.image = output
+            }
+        }
+        
+        // Añadimos las operaciones a la cola de OperationQueue
+        serialFilterQueue.addOperations([sepiaOp1, sepiaOp2, sepiaOp3, sepiaOp4, sepiaOp5, sepiaOp6],
+                                        waitUntilFinished: false)
+        
     }
     
 }
