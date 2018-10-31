@@ -177,10 +177,28 @@ class ViewController: UIViewController {
     }
     
     @IBAction func asyncDataDownload(_ sender: UIButton) {
-        let asyncData1 = AsyncData(url: URL(string: imageURL01)!, id: "image01", defaultData: UIImage(named: "placeholder")!.pngData()!)
+//        let asyncData1 = AsyncData(url: URL(string: imageURL01)!, id: "image01", defaultData: UIImage(named: "Placeholder")!.pngData()!)
+//
+//        asyncData1.delegate = self
+//        asyncData1.execute()
         
-        asyncData1.delegate = self
-        asyncData1.execute()
+//        let asyncGeneric = Async<Data>(url: URL(string: imageURL01)!, id: "image01", defaultData: UIImage(named: "Placeholder")!.pngData()!)
+//
+//        asyncGeneric.load { data in
+//            let image = UIImage(data: data)
+//
+//            DispatchQueue.main.async { [weak self] in
+//                self?.image01.image = image
+//            }
+//        }
+        
+        let asyncGeneric = Async<AsyncImage>(url: URL(string: imageURL01)!, id: "image01", defaultData: AsyncImage(imageLiteralResourceName: "Placeholder.png"))
+        
+        asyncGeneric.load { image in
+            DispatchQueue.main.async { [weak self] in
+                self?.image01.image = image
+            }
+        }
         
     }
     
