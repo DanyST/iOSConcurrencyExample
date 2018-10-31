@@ -30,9 +30,12 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         syncFilterButton.isEnabled = false
+        
+        dispatchAsync()
+        dispatchSync()
     }
     
-    // MARK: - Actions
+    // MARK: - IBActions
     @IBAction func resetImages(_ sender: UIButton) {
         image01.image = UIImage(named: "Placeholder")
         image02.image = UIImage(named: "Placeholder")
@@ -256,6 +259,53 @@ class ViewController: UIViewController {
         serialFilterQueue.addOperations([sepiaOp1, sepiaOp2, sepiaOp3, sepiaOp4, sepiaOp5, sepiaOp6],
                                         waitUntilFinished: false)
         
+    }
+    
+    // MARK: - Methods
+    func dispatchAsync() {
+        // Creamos la cola serial
+        let serialQueue = DispatchQueue(label: "io.keepcoding.serial")
+        
+        var value = 42
+        
+        // definimos la tarea a ejecutar
+        func changeValue() {
+            sleep(1)
+            value = 0
+        }
+        
+        // añadimos la tarea asyncronamente a la cola serial
+        print("----Dispatch Async")
+        
+        serialQueue.async {
+            changeValue()
+        }
+        
+        // mostramos el valor de value
+        print(value)
+    }
+    
+    func dispatchSync() {
+        // Creamos la cola serial
+        let serialQueue = DispatchQueue(label: "io.keepcoding.serial")
+        
+        var value = 42
+        
+        // definimos la tarea a ejecutar
+        func changeValue() {
+            sleep(1)
+            value = 0
+        }
+        
+        // añadimos la tarea asyncronamente a la cola serial
+        
+        print("----Dispatch Sync")
+        serialQueue.sync {
+            changeValue()
+        }
+        
+        // mostramos el valor de value
+        print(value)
     }
     
 }
