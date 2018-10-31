@@ -177,6 +177,11 @@ class ViewController: UIViewController {
     }
     
     @IBAction func asyncDataDownload(_ sender: UIButton) {
+        let asyncData1 = AsyncData(url: URL(string: imageURL01)!, id: "image01", defaultData: UIImage(named: "placeholder")!.pngData()!)
+        
+        asyncData1.delegate = self
+        asyncData1.execute()
+        
     }
     
     @IBAction func syncFilter(_ sender: UIButton) {
@@ -308,5 +313,21 @@ class ViewController: UIViewController {
         print(value)
     }
     
+}
+
+extension ViewController: AsyncDataDelegate {
+    func asyncData(_ sender: AsyncData, didEndLoadingFrom url: URL) {
+        let data = sender.data
+        let image = UIImage(data: data)
+        
+        switch sender.id {
+        case "image01":
+            DispatchQueue.main.async {
+                self.image01.image =  image
+            }
+        default:
+            break
+        }
+    }
 }
 
