@@ -88,6 +88,14 @@
                                     <action selector="syncFilter:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8pm-c6-QwW"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yzQ-ol-z3B">
+                                <rect key="frame" x="249" y="533" width="83" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="URLSession"/>
+                                <connections>
+                                    <action selector="downloadURLSession:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Qgb-ah-QVy"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>

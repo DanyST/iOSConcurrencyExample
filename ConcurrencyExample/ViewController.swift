@@ -192,7 +192,7 @@ class ViewController: UIViewController {
 //            }
 //        }
         
-        let asyncGeneric = Async<AsyncImage>(url: URL(string: imageURL01)!, id: "image01", defaultData: AsyncImage(imageLiteralResourceName: "Placeholder.png"))
+        let asyncGeneric = Async<AsyncImage>(url: URL(string: imageURL01)!, id: "image01", defaultData: #imageLiteral(resourceName: "Placeholder.png"))
         
         asyncGeneric.load { image in
             DispatchQueue.main.async { [weak self] in
@@ -283,6 +283,43 @@ class ViewController: UIViewController {
                                         waitUntilFinished: false)
         
     }
+    
+    
+    @IBAction func downloadURLSession(_ sender: Any) {
+        
+        // Creamos la urlRequest
+        // Nos entrega mayor control que la URL
+        let url = URL(string: imageURL01)
+        let urlRequest = URLRequest(url: url!)
+        
+        // Creamos la dataTask
+        let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            guard error == nil else { print(error!); return }
+            guard let data = data else { print("No hay data"); return }
+            
+            let image = UIImage(data: data)
+            
+            DispatchQueue.main.async {
+                self.image01.image = image
+            }
+        }
+        
+        // lanzamos la tarea en la sesión
+        dataTask.resume()
+        
+        // dataTask con URL
+//        let dataTask2 = URLSession.shared.dataTask(with: url!) { (data, response, error) in
+//            guard error == nil else { print(error!); return }
+//            guard let data = data else { print("No hay data"); return }
+//
+//            let image = UIImage(data: data)
+//
+//            DispatchQueue.main.async {
+//                self.image01.image = image
+//            }
+//        }
+    }
+    
     
     // MARK: - Methods
     func dispatchAsync() {
