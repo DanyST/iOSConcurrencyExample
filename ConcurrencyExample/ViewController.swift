@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class ViewController: UIViewController {
     // MARK: - Properties
@@ -320,6 +321,11 @@ class ViewController: UIViewController {
 //        }
     }
     
+    @IBAction func downloadAlamofire(_ sender: Any) {
+        let url = URL(string: imageURL01)!
+        self.image01.setImage(with: url)
+        
+    }
     
     // MARK: - Methods
     func dispatchAsync() {
@@ -382,6 +388,19 @@ extension ViewController: AsyncDataDelegate {
             }
         default:
             break
+        }
+    }
+}
+
+// Solo estará disponible en este archivo
+private extension UIImageView {
+    func setImage(with url: URL) {
+        Alamofire.request(url).responseData { (response) in
+            let image = UIImage(data: response.data!)
+            
+            DispatchQueue.main.async {
+                self.image = image
+            }
         }
     }
 }
